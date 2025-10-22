@@ -17,27 +17,32 @@
     // Use pg_last_error() for PostgreSQL-specific error
   //  die("Connection failed: " . pg_last_error());
 
-services:
-  - type: web
-    name: libsystem4
-    env: php
-    plan: free
-    buildCommand: ""
-    startCommand: php -S 0.0.0.0:10000 -t libsystem
-    envVars:
-      - key: MYSQL_ADDON_HOST
-        value: bmrndqrsnpd4r1prk7ax-mysql.services.clever-cloud.com
-      - key: MYSQL_ADDON_DB
-        value: bmrndqrsnpd4r1prk7ax
-      - key: MYSQL_ADDON_USER
-        value: uqm5akn4krxj1h4n
-      - key: MYSQL_ADDON_PASSWORD
-        value: CQKiE6eKtts6QZXkEKlW
-      - key: MYSQL_ADDON_PORT
-        value: 3306
 
+// ==============================
+// Database Connection (Clever Cloud + Render Ready)
+// ==============================
+
+// Try to get credentials from Render environment variables first.
+// If not found, it falls back to Clever Cloud defaults for local testing.
+$host = getenv('MYSQL_ADDON_HOST') ?: 'bmrndqrsnpd4r1prk7ax-mysql.services.clever-cloud.com';
+$username = getenv('MYSQL_ADDON_USER') ?: 'uqm5akn4krxj1h4n';
+$password = getenv('MYSQL_ADDON_PASSWORD') ?: 'CQKiE6eKtts6QZXkEKlW';
+$database = getenv('MYSQL_ADDON_DB') ?: 'bmrndqrsnpd4r1prk7ax';
+$port = getenv('MYSQL_ADDON_PORT') ?: 3306;
+
+// Create connection
+$conn = new mysqli($host, $username, $password, $database, $port);
+
+// Check connection
+if ($conn->connect_error) {
+    die("❌ Database connection failed: " . $conn->connect_error);
 }
 
-// Optional: set error reporting for queries
-pg_query($conn, "SET CLIENT_ENCODING TO 'UTF8';");
+// Set UTF-8 for compatibility
+$conn->set_charset("utf8mb4");
+
+// Optional — confirm connection (for testing only)
+// echo "✅ Connected successfully to: " . $database;
+
+
 ?>
