@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: libsystem4
+    env: php
+    plan: free
+    buildCommand: ""
+    startCommand: php -S 0.0.0.0:10000 -t libsystem
+    envVars:
+      - key: MYSQL_ADDON_HOST
+        value: bmrndqrsnpd4r1prk7ax-mysql.services.clever-cloud.com
+      - key: MYSQL_ADDON_DB
+        value: bmrndqrsnpd4r1prk7ax
+      - key: MYSQL_ADDON_USER
+        value: uqm5akn4krxj1h4n
+      - key: MYSQL_ADDON_PASSWORD
+        value: CQKiE6eKtts6QZXkEKlW
+      - key: MYSQL_ADDON_PORT
+        value: 3306
