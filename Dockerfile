@@ -1,15 +1,16 @@
 # Use official php-apache image
 FROM php:8.2-apache
 
-# Install system deps and PHP extensions
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
-    && docker-php-ext-install pdo_mysql
-
-# Enable Apache rewrite (if you use it)
-RUN a2enmod rewrite
+    libpq-dev \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install pgsql pdo_pgsql \
+    && docker-php-ext-enable pgsql pdo_pgsql \
+    && a2enmod rewrite
 
 # Copy app to webroot
 COPY . /var/www/html/
@@ -22,5 +23,5 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port (Render handles forwarding)
 EXPOSE 8080
 
-# Use apache on foreground
+# Start Apache in foreground
 CMD ["apache2-foreground"]
