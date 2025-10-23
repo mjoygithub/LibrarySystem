@@ -1,10 +1,9 @@
 services:
   - type: web
     name: libsystem4
-    env: php 
     plan: free
-    buildCommand: ""
-    startCommand: php -S 0.0.0.0:10000 -t libsystem
+    env: docker
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: MYSQL_ADDON_HOST
         value: bmrndqrsnpd4r1prk7ax-mysql.services.clever-cloud.com
