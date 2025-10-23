@@ -45,6 +45,4 @@ $conn->set_charset("utf8mb4");
 // echo "✅ Connected successfully to: " . $database;
 
 
-// Optional: set error reporting for queries
-pg_query($conn, "SET CLIENT_ENCODING TO 'UTF8';");
 ?>
