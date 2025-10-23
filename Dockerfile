@@ -1,17 +1,21 @@
-# Use official PHP with Apache image
+# Use official PHP with Apache
 FROM php:8.2-apache
 
-# Enable commonly needed PHP extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Install system tools and PHP extensions
+RUN apt-get update && apt-get install -y git unzip \
+    && docker-php-ext-install mysqli pdo pdo_mysql
 
-# Copy project files into Apache web root
+# Install Composer globally
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Copy project files
 COPY ./libsystem /var/www/html/
-
-# Expose port 80
-EXPOSE 80
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Optional: set timezone to Asia/Manila
-RUN echo "date.timezone=Asia/Manila" > /usr/local/etc/php/conf.d/timezone.ini
+# Install PHP dependencies (PHPMailer, etc.)
+RUN composer install --no-interaction --no-dev || true
+
+# Expose port 80
+EXPOSE 80
