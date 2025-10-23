@@ -1,9 +1,16 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require __DIR__ . '/../../vendor/autoload.php';
-
+// Safely include Composer autoload file
+$autoloadPath = __DIR__ . '/../../vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require $autoloadPath;
+} else {
+    echo "<div class='alert alert-danger text-center'>Autoload file not found. Did you run Composer install?</div>";
+    return;
+}
 
 function sendContactMail($name, $email, $message) {
     $mail = new PHPMailer(true);
